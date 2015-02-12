@@ -10,7 +10,17 @@ var bet1Button: createjs.Bitmap;
 var bet5Button: createjs.Bitmap;
 var bet10Button: createjs.Bitmap;
 var resetBetButton: createjs.Bitmap;
-var bettingAmount: number;
+var bettingAmount: number = 1;
+var credit: number = 500;
+var numberWins: number = 0;
+var jackpot: number = 1000;
+var creditsText: createjs.Text;
+var betText: createjs.Text;
+var winsText: createjs.Text;
+var jackpotText: createjs.Text;
+var reel1Img: createjs.Bitmap;
+var reel2Img: createjs.Bitmap;
+var reel3Img: createjs.Bitmap;
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -74,16 +84,26 @@ function buttonOver(button: string) {
 }
 
 function spinReels() {
-    //add the code to spin reels
+    
     
 }
 
 function resetGame() {
-
+    bettingAmount = 1;
+    credit  = 200;
+    numberWins = 0;
+    jackpot = 1000;
 }
 
-function betting(ammount: number) {
+function betting(amount: number) {
 
+    if (amount == null) {
+        bettingAmount = 1;
+        console.log("" + bettingAmount);
+    }else{
+        bettingAmount += amount;
+        console.log("" + bettingAmount);
+    }
 }
 
 function createUi(): void {
@@ -152,6 +172,23 @@ function createUi(): void {
     resetBetButton.addEventListener("mouseover", function () { buttonOver("resetBetButton"); });
     resetBetButton.addEventListener("mouseout", function () { buttonOut("resetBetButton"); });
 
+    //instatite the first reel
+    reel1Img = new createjs.Bitmap("assets/images/blank.png");
+    reel1Img.x = 148 // set it to the x coord i got
+    reel1Img.y = 333 // set it to the y coord i got
+    game.addChild(reel1Img);
+
+    //instatite the first reel
+    reel2Img = new createjs.Bitmap("assets/images/blank.png");
+    reel2Img.x = 242 // set it to the x coord i got
+    reel2Img.y = 333 // set it to the y coord i got
+    game.addChild(reel2Img);
+
+    //instatite the first reel
+    reel3Img = new createjs.Bitmap("assets/images/blank.png");
+    reel3Img.x = 337 // set it to the x coord i got
+    reel3Img.y = 333 // set it to the y coord i got
+    game.addChild(reel3Img);
 }
 
 

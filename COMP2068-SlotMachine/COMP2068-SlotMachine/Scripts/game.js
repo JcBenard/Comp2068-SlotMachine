@@ -10,7 +10,17 @@ var bet1Button;
 var bet5Button;
 var bet10Button;
 var resetBetButton;
-var bettingAmount;
+var bettingAmount = 1;
+var credit = 500;
+var numberWins = 0;
+var jackpot = 1000;
+var creditsText;
+var betText;
+var winsText;
+var jackpotText;
+var reel1Img;
+var reel2Img;
+var reel3Img;
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -73,13 +83,23 @@ function buttonOver(button) {
 }
 
 function spinReels() {
-    //add the code to spin reels
 }
 
 function resetGame() {
+    bettingAmount = 1;
+    credit = 200;
+    numberWins = 0;
+    jackpot = 1000;
 }
 
-function betting(ammount) {
+function betting(amount) {
+    if (amount == null) {
+        bettingAmount = 1;
+        console.log("" + bettingAmount);
+    } else {
+        bettingAmount += amount;
+        console.log("" + bettingAmount);
+    }
 }
 
 function createUi() {
@@ -179,6 +199,24 @@ function createUi() {
     resetBetButton.addEventListener("mouseout", function () {
         buttonOut("resetBetButton");
     });
+
+    //instatite the first reel
+    reel1Img = new createjs.Bitmap("assets/images/blank.png");
+    reel1Img.x = 148;
+    reel1Img.y = 333;
+    game.addChild(reel1Img);
+
+    //instatite the first reel
+    reel2Img = new createjs.Bitmap("assets/images/blank.png");
+    reel2Img.x = 242;
+    reel2Img.y = 333;
+    game.addChild(reel2Img);
+
+    //instatite the first reel
+    reel3Img = new createjs.Bitmap("assets/images/blank.png");
+    reel3Img.x = 148;
+    reel3Img.y = 333;
+    game.addChild(reel3Img);
 }
 
 // Our Game Kicks off in here
