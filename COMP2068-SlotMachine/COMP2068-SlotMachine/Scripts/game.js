@@ -18,9 +18,7 @@ var creditsText;
 var betText;
 var winsText;
 var jackpotText;
-var reel1Img;
-var reel2Img;
-var reel3Img;
+var reelImgs = [];
 
 var grapes = 0;
 var bananas = 0;
@@ -115,7 +113,17 @@ function buttonOver(button) {
 function spinReels() {
     spinResult = Reels();
     fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
-    console.log(fruits);
+
+    for (var index = 0; index < 3; index++) {
+        if (turn > 0) {
+            game.removeChild(reelImgs[index]);
+        }
+        reelImgs[index] = new createjs.Bitmap("assets/images/" + spinResult[index] + ".png");
+        reelImgs[index].x = 148 + (95 * index);
+        reelImgs[index].y = 333;
+
+        game.addChild(reelImgs[index]);
+    }
 }
 
 function resetGame() {
@@ -155,31 +163,31 @@ function Reels() {
                 blanks++;
                 break;
             case checkRange(outCome[spin], 28, 37):
-                betLine[spin] = "Grapes";
+                betLine[spin] = "grapes";
                 grapes++;
                 break;
             case checkRange(outCome[spin], 38, 46):
-                betLine[spin] = "Banana";
+                betLine[spin] = "banana";
                 bananas++;
                 break;
             case checkRange(outCome[spin], 47, 54):
-                betLine[spin] = "Orange";
+                betLine[spin] = "orange";
                 oranges++;
                 break;
             case checkRange(outCome[spin], 55, 59):
-                betLine[spin] = "Cherry";
+                betLine[spin] = "cherry";
                 cherries++;
                 break;
             case checkRange(outCome[spin], 60, 62):
-                betLine[spin] = "Bar";
+                betLine[spin] = "bar";
                 bars++;
                 break;
             case checkRange(outCome[spin], 63, 64):
-                betLine[spin] = "Bell";
+                betLine[spin] = "bell";
                 bells++;
                 break;
             case checkRange(outCome[spin], 65, 65):
-                betLine[spin] = "Seven";
+                betLine[spin] = "seven";
                 sevens++;
                 break;
         }
@@ -327,24 +335,6 @@ function createUi() {
     resetBetButton.addEventListener("mouseout", function () {
         buttonOut("resetBetButton");
     });
-
-    //instatite the first reel
-    reel1Img = new createjs.Bitmap("assets/images/blank.png");
-    reel1Img.x = 148;
-    reel1Img.y = 333;
-    game.addChild(reel1Img);
-
-    //instatite the first reel
-    reel2Img = new createjs.Bitmap("assets/images/blank.png");
-    reel2Img.x = 242;
-    reel2Img.y = 333;
-    game.addChild(reel2Img);
-
-    //instatite the first reel
-    reel3Img = new createjs.Bitmap("assets/images/blank.png");
-    reel3Img.x = 337;
-    reel3Img.y = 333;
-    game.addChild(reel3Img);
 }
 
 // Our Game Kicks off in here

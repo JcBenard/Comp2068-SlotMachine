@@ -18,9 +18,9 @@ var creditsText: createjs.Text;
 var betText: createjs.Text;
 var winsText: createjs.Text;
 var jackpotText: createjs.Text;
-var reel1Img: createjs.Bitmap;
-var reel2Img: createjs.Bitmap;
-var reel3Img: createjs.Bitmap;
+
+var reelContainer: createjs.Container[] = []; 
+var reelImgs: createjs.Bitmap[] = []; 
 
 var grapes = 0;
 var bananas = 0;
@@ -116,7 +116,18 @@ function buttonOver(button: string) {
 function spinReels() {  
     spinResult = Reels();
     fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
-    console.log(fruits);
+
+    for (var index = 0; index < 3; index++) {
+        if (turn > 0) {
+            game.removeChild(reelImgs[index]);
+        }
+        reelImgs[index] = new createjs.Bitmap("assets/images/" + spinResult[index] + ".png");
+        reelImgs[index].x = 148 + (95 * index);
+        reelImgs[index].y = 333;
+        
+        game.addChild(reelImgs[index]);
+
+    }
 }
 
 function resetGame() {
@@ -158,31 +169,31 @@ function Reels() {
                 blanks++;
                 break;
             case checkRange(outCome[spin], 28, 37): // 15.4% probability
-                betLine[spin] = "Grapes";
+                betLine[spin] = "grapes";
                 grapes++;
                 break;
             case checkRange(outCome[spin], 38, 46): // 13.8% probability
-                betLine[spin] = "Banana";
+                betLine[spin] = "banana";
                 bananas++;
                 break;
             case checkRange(outCome[spin], 47, 54): // 12.3% probability
-                betLine[spin] = "Orange";
+                betLine[spin] = "orange";
                 oranges++;
                 break;
             case checkRange(outCome[spin], 55, 59): //  7.7% probability
-                betLine[spin] = "Cherry";
+                betLine[spin] = "cherry";
                 cherries++;
                 break;
             case checkRange(outCome[spin], 60, 62): //  4.6% probability
-                betLine[spin] = "Bar";
+                betLine[spin] = "bar";
                 bars++;
                 break;
             case checkRange(outCome[spin], 63, 64): //  3.1% probability
-                betLine[spin] = "Bell";
+                betLine[spin] = "bell";
                 bells++;
                 break;
             case checkRange(outCome[spin], 65, 65): //  1.5% probability
-                betLine[spin] = "Seven";
+                betLine[spin] = "seven";
                 sevens++;
                 break;
         }
@@ -315,24 +326,6 @@ function createUi(): void {
     resetBetButton.addEventListener("click", function () { betting(null); });
     resetBetButton.addEventListener("mouseover", function () { buttonOver("resetBetButton"); });
     resetBetButton.addEventListener("mouseout", function () { buttonOut("resetBetButton"); });
-
-    //instatite the first reel
-    reel1Img = new createjs.Bitmap("assets/images/blank.png");
-    reel1Img.x = 148 // set it to the x coord i got
-    reel1Img.y = 333 // set it to the y coord i got
-    game.addChild(reel1Img);
-
-    //instatite the first reel
-    reel2Img = new createjs.Bitmap("assets/images/blank.png");
-    reel2Img.x = 242 // set it to the x coord i got
-    reel2Img.y = 333 // set it to the y coord i got
-    game.addChild(reel2Img);
-
-    //instatite the first reel
-    reel3Img = new createjs.Bitmap("assets/images/blank.png");
-    reel3Img.x = 337 // set it to the x coord i got
-    reel3Img.y = 333 // set it to the y coord i got
-    game.addChild(reel3Img);
 }
 
 
