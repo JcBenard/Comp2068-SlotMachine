@@ -1,8 +1,9 @@
-﻿var canvas;
+﻿// Game Objects 
+var canvas;
 var stage: createjs.Stage;
-
-// Game Objects 
 var game: createjs.Container;
+var reelContainer: createjs.Container[] = []; 
+
 var background: createjs.Bitmap;
 var spinButton: createjs.Bitmap;
 var resetButton: createjs.Bitmap;
@@ -10,27 +11,27 @@ var bet1Button: createjs.Bitmap;
 var bet5Button: createjs.Bitmap;
 var bet10Button: createjs.Bitmap;
 var resetBetButton: createjs.Bitmap;
-var playerBet: number = 1;
-var playerCredits: number = 500;
-var lastWinnings: number = 0;
-var jackpot: number = 1000;
+var reelImgs: createjs.Bitmap[] = []; 
+
 var creditsText: createjs.Text;
 var betText: createjs.Text;
 var winningsText: createjs.Text;
 var jackpotText: createjs.Text;
 
-var reelContainer: createjs.Container[] = []; 
-var reelImgs: createjs.Bitmap[] = []; 
-
-var grapes = 0;
-var bananas = 0;
-var oranges = 0;
-var cherries = 0;
-var bars = 0;
-var bells = 0;
-var sevens = 0;
-var blanks = 0;
-var turn = 0;
+//game variables
+var playerBet: number = 1;
+var playerCredits: number = 500;
+var lastWinnings: number = 0;
+var jackpot: number = 1000;
+var grapes: number = 0;
+var bananas: number = 0;
+var oranges: number = 0;
+var cherries: number = 0;
+var bars: number = 0;
+var bells: number = 0;
+var sevens: number = 0;
+var blanks: number = 0;
+var turn: number = 0;
 var spinResult;
 var fruits = "";
 
@@ -109,6 +110,7 @@ function buttonOver(button: string) {
 function spinReels() {  
     spinResult = Reels();
     fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
+    determineWinnings();
 
     for (var index = 0; index < 3; index++) {
         if (turn > 0) {
@@ -133,10 +135,12 @@ function betting(amount: number) {
 
     if (amount == null) {
         playerBet = 1;
-        console.log("" + playerBet);
+        betText.text = "" + playerBet;
+        betText.regX = betText.getBounds().width;
     }else{
         playerBet += amount;
-        console.log("" + playerBet);
+        betText.text = "" + playerBet;
+        betText.regX = betText.getBounds().width;     
     }
 }
 
@@ -188,6 +192,7 @@ function Reels() {
                 betLine[spin] = "seven";
                 sevens++;
                 break;
+
         }
     }
     return betLine;
@@ -243,8 +248,21 @@ function determineWinnings() {
         else {
             lastWinnings = playerBet * 1;
         }
+
+        playerCredits += lastWinnings;
+
+        creditsText.text = "" + playerCredits;
+        creditsText.regX = creditsText.getBounds().width;   
+        winningsText.text = "" + lastWinnings;
+        winningsText.regX = winningsText.getBounds().width;  
+        resetFruitTally(); 
     }
     else {
+
+        playerCredits -= playerBet;
+        creditsText.text = "" + playerCredits;
+        creditsText.regX = creditsText.getBounds().width;  
+        resetFruitTally();
     }
 
 }

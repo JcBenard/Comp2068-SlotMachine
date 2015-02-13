@@ -1,8 +1,9 @@
-﻿var canvas;
+﻿// Game Objects
+var canvas;
 var stage;
-
-// Game Objects
 var game;
+var reelContainer = [];
+
 var background;
 var spinButton;
 var resetButton;
@@ -10,18 +11,18 @@ var bet1Button;
 var bet5Button;
 var bet10Button;
 var resetBetButton;
-var playerBet = 1;
-var playerCredits = 500;
-var lastWinnings = 0;
-var jackpot = 1000;
+var reelImgs = [];
+
 var creditsText;
 var betText;
 var winningsText;
 var jackpotText;
 
-var reelContainer = [];
-var reelImgs = [];
-
+//game variables
+var playerBet = 1;
+var playerCredits = 500;
+var lastWinnings = 0;
+var jackpot = 1000;
 var grapes = 0;
 var bananas = 0;
 var oranges = 0;
@@ -108,6 +109,7 @@ function buttonOver(button) {
 function spinReels() {
     spinResult = Reels();
     fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
+    determineWinnings();
 
     for (var index = 0; index < 3; index++) {
         if (turn > 0) {
@@ -131,10 +133,12 @@ function resetGame() {
 function betting(amount) {
     if (amount == null) {
         playerBet = 1;
-        console.log("" + playerBet);
+        betText.text = "" + playerBet;
+        betText.regX = betText.getBounds().width;
     } else {
         playerBet += amount;
-        console.log("" + playerBet);
+        betText.text = "" + playerBet;
+        betText.regX = betText.getBounds().width;
     }
 }
 
@@ -225,7 +229,19 @@ function determineWinnings() {
         } else {
             lastWinnings = playerBet * 1;
         }
+
+        playerCredits += lastWinnings;
+
+        creditsText.text = "" + playerCredits;
+        creditsText.regX = creditsText.getBounds().width;
+        winningsText.text = "" + lastWinnings;
+        winningsText.regX = winningsText.getBounds().width;
+        resetFruitTally();
     } else {
+        playerCredits -= playerBet;
+        creditsText.text = "" + playerCredits;
+        creditsText.regX = creditsText.getBounds().width;
+        resetFruitTally();
     }
 }
 
