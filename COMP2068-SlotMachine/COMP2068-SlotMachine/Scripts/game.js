@@ -35,6 +35,7 @@ var turn = 0;
 var spinResult;
 var fruits = "";
 
+//reset all the counters to 0
 function resetFruitTally() {
     grapes = 0;
     bananas = 0;
@@ -44,6 +45,17 @@ function resetFruitTally() {
     bells = 0;
     sevens = 0;
     blanks = 0;
+}
+
+//see if the player won the jackpot
+function checkJackPot() {
+    // compare two random values
+    var jackPotTry = Math.floor(Math.random() * 51 + 1);
+    var jackPotWin = Math.floor(Math.random() * 51 + 1);
+    if (jackPotTry == jackPotWin) {
+        playerCredits += jackpot;
+        jackpot = 1000;
+    }
 }
 
 function init() {
@@ -112,9 +124,7 @@ function spinReels() {
     determineWinnings();
 
     for (var index = 0; index < 3; index++) {
-        if (turn > 0) {
-            reelContainer[index].removeAllChildren;
-        }
+        reelContainer[index].removeAllChildren();
         reelImgs[index] = new createjs.Bitmap("assets/images/" + spinResult[index] + ".png");
         reelImgs[index].x = 148 + (95 * index);
         reelImgs[index].y = 333;
@@ -125,12 +135,17 @@ function spinReels() {
 
 function resetGame() {
     playerBet = 1;
-    playerCredits = 200;
+    playerCredits = 500;
     lastWinnings = 0;
     jackpot = 1000;
+
+    game.removeAllChildren();
+    createUi();
 }
 
+//if the player changes their bet amount
 function betting(amount) {
+    //if they chose to reset the amount
     if (amount == null) {
         playerBet = 1;
         betText.text = "" + playerBet;
@@ -234,15 +249,34 @@ function determineWinnings() {
 
         creditsText.text = "" + playerCredits;
         creditsText.regX = creditsText.getBounds().width;
+
         winningsText.text = "" + lastWinnings;
         winningsText.regX = winningsText.getBounds().width;
+
+        checkJackPot();
         resetFruitTally();
     } else {
         playerCredits -= playerBet;
+
         creditsText.text = "" + playerCredits;
         creditsText.regX = creditsText.getBounds().width;
+
+        jackpot += Math.round(playerBet * .5);
+        jackpotText.text = "" + jackpot;
+        jackpotText.regX = jackpotText.getBounds().width * .5;
+
+        if (playerCredits == 0) {
+            playerLose();
+        }
+
         resetFruitTally();
     }
+}
+
+function playerLose() {
+    alert("It seems your all out of money. Please Leave.");
+    window.open('', '_parent', '');
+    window.close();
 }
 
 function createUi() {
@@ -344,35 +378,35 @@ function createUi() {
     });
 
     //instatite the players total credits
-    creditsText = new createjs.Text("" + playerCredits, "40px Consolas", "#000000");
+    creditsText = new createjs.Text("" + playerCredits, "40px Comic Sans MS", "#000000");
     creditsText.x = 219;
     creditsText.y = 148;
     creditsText.regX = creditsText.getBounds().width;
     game.addChild(creditsText);
 
     //instatite the players bet
-    betText = new createjs.Text("" + playerBet, "40px Consolas", "#000000");
+    betText = new createjs.Text("" + playerBet, "40px Comic Sans MS", "#000000");
     betText.x = 325;
     betText.y = 148;
     betText.regX = betText.getBounds().width;
     game.addChild(betText);
 
     //instatite the players last winnings amount
-    winningsText = new createjs.Text("" + lastWinnings, "40px Consolas", "#000000");
-    winningsText.x = 469;
+    winningsText = new createjs.Text("" + lastWinnings, "40px Comic Sans MS", "#000000");
+    winningsText.x = 466;
     winningsText.y = 148;
     winningsText.regX = betText.getBounds().width;
     game.addChild(winningsText);
 
     //instatite the jackpot amount
-    jackpotText = new createjs.Text("" + jackpot, "40px Consolas", "#000000");
+    jackpotText = new createjs.Text("" + jackpot, "40px Comic Sans MS", "#000000");
     jackpotText.x = 279;
     jackpotText.y = 79;
     jackpotText.regX = jackpotText.getBounds().width * 0.5;
     game.addChild(jackpotText);
 }
 
-// Our Game Kicks off in here
+//start of the game
 function main() {
     //instantiate the game container
     game = new createjs.Container();
@@ -380,8 +414,8 @@ function main() {
     //get the slots ui
     createUi();
 
+    //add the containers to the stage
     stage.addChild(game);
-
     for (var i = 0; i < 3; i++) {
         reelContainer[i] = new createjs.Container();
         stage.addChild(reelContainer[i]);
