@@ -1,4 +1,11 @@
-﻿// Game Objects 
+﻿/*
+Slot Machine
+Jean-Claude Benard
+Febuary 20th 2015
+this class create and runs a functional slot machine
+*/
+
+// Game Objects 
 var canvas;
 var stage: createjs.Stage;
 var game: createjs.Container;
@@ -34,6 +41,8 @@ var blanks: number = 0;
 var turn: number = 0;
 var spinResult;
 var allowedToBet: boolean = true
+var blink1;
+var blink2;
 
 //reset all the counters to 0
 function resetFruitTally() {
@@ -275,6 +284,8 @@ function resetGame() {
 
 //the main function to spin the reels, display the results and change the number totals 
 function spinReels() {  
+    clearInterval(blink1);//makes the objects stop blinking after the player won the jackpot
+    clearInterval(blink2);
     spinResult = Reels();//call the reels function to get the reel spins
     determineWinnings();//call this function to find how much the player won and update the board acordingly
 
@@ -290,7 +301,7 @@ function spinReels() {
 }
 
 //this function determins the reels through random number generation
-function Reels() {
+function Reels(): String[]{
     var betLine = [" ", " ", " "];
     var outCome = [0, 0, 0];
 
@@ -337,7 +348,7 @@ function Reels() {
 }
 
 //if the player won find out how much they won and add it to there credits, if they lost remove the amount they bet from there credits
-function determineWinnings() {
+function determineWinnings(): void {
     if (blanks == 0) {//if they didn't get any blanks find out how much they won based on the tally numbers
         if (grapes == 3) {
             lastWinnings = playerBet * 10;
@@ -445,6 +456,38 @@ function checkJackPot(): void {
     //if the random numbers are the same add the jackpot amount to there total and set the jackpot to default
     if (jackPotTry == jackPotWin) {
         playerCredits += jackpot;
-        jackpot = 1000;
+        jackPotShow();
+        jackpot = 1000;     
     }
+}
+
+//does some grahpical things to show the player won the jackpot
+function jackPotShow(): void {
+
+    //the object will blink until the player acts
+    blink1 = setInterval(function () {
+        spinButton.alpha = 0.8;
+        resetButton.alpha = 0.8;
+        bet1Button.alpha = 0.8;
+        bet5Button.alpha = 0.8;
+        bet10Button.alpha = 0.8;
+        resetBetButton.alpha = 0.8;
+        betText.text = "";
+        creditsText.text = "";
+        jackpotText.text = "";
+        winningsText.text = "";
+    }, 500);
+
+    blink2 = setInterval(function () {
+        spinButton.alpha = 1.0;
+        resetButton.alpha = 1.0;
+        bet1Button.alpha = 1.0;
+        bet5Button.alpha = 1.0;
+        bet10Button.alpha = 1.0;
+        resetBetButton.alpha = 1.0;
+        betText.text = "" + playerBet;
+        creditsText.text = "" + playerCredits;
+        jackpotText.text = "" + jackpot;
+        winningsText.text = "" + lastWinnings;
+    }, 1000);
 }
